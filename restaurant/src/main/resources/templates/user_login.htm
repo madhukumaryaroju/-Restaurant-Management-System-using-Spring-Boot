@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Authentication</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .container {
+            display: flex;
+            width: 900px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .welcome-section {
+            flex: 1;
+            padding: 40px;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .welcome-section h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-section p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .auth-section {
+            flex: 1;
+            padding: 40px;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #777;
+        }
+        
+        .tab.active {
+            color: #6e8efb;
+            border-bottom: 2px solid #6e8efb;
+        }
+        
+        .form-container {
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #5a7df4;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 5px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #2ecc71;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to Our E-Commerce Store</h1>
+            <p>Shop the latest trends in fashion, electronics, and home goods. Create an account or login to start shopping.</p>
+            <p>Enjoy fast shipping, easy returns, and exclusive member discounts.</p>
+        </div>
+        
+        <div class="auth-section">
+            <div class="tab-container">
+                <div class="tab active" onclick="switchTab('login')">Login</div>
+                <div class="tab" onclick="switchTab('register')">Register</div>
+            </div>
+            
+            <div id="login-message" class="success-message"></div>
+            <div id="register-message" class="success-message"></div>
+            
+            <div id="login-form" class="form-container active">
+                <h2>User Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                        <div id="login-email-error" class="error-message">Please enter a valid email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                        <div id="login-password-error" class="error-message">Password is required</div>
+                    </div>
+                    
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+            
+            <div id="register-form" class="form-container">
+                <h2>Create Account</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="register-name">Full Name</label>
+                        <input type="text" id="register-name" required>
+                        <div id="register-name-error" class="error-message">Name is required</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                        <div id="register-email-error" class="error-message">Please enter a valid email</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required>
+                        <div id="register-password-error" class="error-message">Password must be at least 6 characters</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-confirm">Confirm Password</label>
+                        <input type="password" id="register-confirm" required>
+                        <div id="register-confirm-error" class="error-message">Passwords don't match</div>
+                    </div>
+                    
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Switch between login and register tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            if (tabName === 'login') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+        
+        // Form validation
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+            
+            const email = document.getElementById('login-email');
+            const password = document.getElementById('login-password');
+            
+            // Validate email
+            if (!email.value || !email.value.includes('@')) {
+                document.getElementById('login-email-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('login-email-error').style.display = 'none';
+            }
+            
+            // Validate password
+            if (!password.value) {
+                document.getElementById('login-password-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('login-password-error').style.display = 'none';
+            }
+            
+            if (valid) {
+                // Redirect to user.html after successful validation
+                window.location.href = 'shop';
+            }
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+            
+            const name = document.getElementById('register-name');
+            const email = document.getElementById('register-email');
+            const password = document.getElementById('register-password');
+            const confirm = document.getElementById('register-confirm');
+            
+            // Validate name
+            if (!name.value) {
+                document.getElementById('register-name-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('register-name-error').style.display = 'none';
+            }
+            
+            // Validate email
+            if (!email.value || !email.value.includes('@')) {
+                document.getElementById('register-email-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('register-email-error').style.display = 'none';
+            }
+            
+            // Validate password
+            if (!password.value || password.value.length < 6) {
+                document.getElementById('register-password-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('register-password-error').style.display = 'none';
+            }
+            
+            // Validate confirm password
+            if (password.value !== confirm.value) {
+                document.getElementById('register-confirm-error').style.display = 'block';
+                valid = false;
+            } else {
+                document.getElementById('register-confirm-error').style.display = 'none';
+            }
+            
+            if (valid) {
+                document.getElementById('register-message').textContent = 'Registration successful!';
+                document.getElementById('register-message').style.display = 'block';
+                
+                // Clear form
+                this.reset();
+                
+                // Switch to login tab after 2 seconds
+                setTimeout(() => {
+                    switchTab('login');
+                    document.getElementById('register-message').style.display = 'none';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

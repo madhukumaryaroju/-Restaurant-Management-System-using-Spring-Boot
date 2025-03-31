@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shop | Modern Store</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+ <style>
+    :root {
+        --primary: #4361ee;
+        --primary-light: #e6eaf8;
+        --primary-dark: #3a56e0;
+        --secondary: #f8f9fc;
+        --dark: #2b2d42;
+        --light: #f8f9fa;
+        --gray: #6c757d;
+        --light-gray: #e9ecef;
+        --success: #4cc9a0;
+        --info: #4895ef;
+        --warning: #f77f00;
+        --danger: #ef476f;
+        --white: #ffffff;
+        --black: #000000;
+        
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+        --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+        --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+        
+        --radius-sm: 0.5rem;
+        --radius-md: 0.75rem;
+        --radius-lg: 1rem;
+        
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--black);
+        color: var(--light);
+        background-image: url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        background-blend-mode: overlay;
+    }
+
+    /* Navbar */
+    .navbar {
+        background: rgba(255,255,255,0.9) !important;
+        box-shadow: var(--shadow-md);
+        padding: 0.8rem 2rem;
+    }
+
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .navbar-brand img {
+        height: 40px;
+        margin-right: 10px;
+        transition: var(--transition);
+    }
+
+    .navbar-brand:hover img {
+        transform: rotate(-5deg) scale(1.05);
+    }
+
+    .nav-link {
+        color: var(--gray);
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-sm);
+        margin: 0 0.25rem;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .nav-link:hover, .nav-link.active {
+        color: var(--primary);
+        background: var(--primary-light);
+    }
+
+    /* Main Content */
+    .shop-container {
+        background: rgba(0,0,0,0.7);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        margin: 2rem auto;
+        backdrop-filter: blur(5px);
+    }
+
+    .category-sidebar {
+        background: rgba(255,255,255,0.1);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        height: fit-content;
+    }
+
+    .category-title {
+        color: var(--white);
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 0.5rem;
+    }
+
+    .category-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .category-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .category-link {
+        display: block;
+        padding: 0.75rem 1rem;
+        color: var(--light);
+        text-decoration: none;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+    }
+
+    .category-link:hover {
+        background: rgba(255,255,255,0.2);
+        color: var(--white);
+        transform: translateX(5px);
+    }
+
+    /* Product Cards */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+
+    .product-card {
+        background: rgba(255,255,255,0.1);
+        border: none;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: var(--transition);
+        backdrop-filter: blur(5px);
+        width: 100%;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .product-image-container {
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.05);
+    }
+
+    .product-image {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+        transition: var(--transition);
+    }
+
+    .product-card:hover .product-image {
+        transform: scale(1.05);
+    }
+
+    .product-body {
+        padding: 1.5rem;
+    }
+
+    .product-title {
+        color: var(--white);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-price {
+        color: var(--primary-light);
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-description {
+        color: var(--light-gray);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .view-btn {
+        background: var(--primary);
+        border: none;
+        color: var(--white);
+        padding: 0.5rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 500;
+        transition: var(--transition);
+        width: 100%;
+    }
+
+    .view-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .product-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 992px) {
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .shop-container {
+            padding: 1rem;
+        }
+        
+        .category-sidebar {
+            margin-bottom: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .navbar {
+            padding: 0.7rem 1rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/images/logo.png}" src="../static/images/logo.png" alt="Shop Logo">
+                Modern Store
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/shop}">
+                            <i class="fas fa-shopping-bag"></i> Shop
+                        </a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/admin}">
+                            <i class="fas fa-user-shield"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container shop-container">
+        <div class="row">
+            <!-- Categories Sidebar -->
+            <div class="col-lg-3">
+                <div class="category-sidebar">
+                    <h4 class="category-title">Categories</h4>
+                    <ul class="category-list">
+                        <li class="category-item">
+                            <a th:href="@{/shop}" class="category-link">All Products</a>
+                        </li>
+                        <li class="category-item" th:each="category : ${categories}">
+                            <a th:href="@{/shop/category/{id}(id=${category.id})}" 
+                               class="category-link" th:text="${category.name}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                <div class="product-grid">
+                    <div class="product-card" th:each="product : ${products}">
+                        <div class="product-image-container">
+                            <img class="product-image" th:src="@{${'/productImages/' + product.imageName}}" th:alt="${product.name}">
+                        </div>
+                        <div class="product-body">
+                            <h5 class="product-title" th:text="${product.name}"></h5>
+                            <div class="product-price">₹<span th:text="${product.price}"></span></div>
+                            <p class="product-description" th:text="${product.description}"></p>
+                            <a th:href="@{/shop/viewproduct/{id}(id=${product.id})}" class="btn view-btn">
+                                <i class="fas fa-eye me-2"></i> View Product
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

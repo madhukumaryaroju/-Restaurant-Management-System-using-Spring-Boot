@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Manage Category | Admin Dashboard</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e6eaf8;
+            --primary-dark: #3a56e0;
+            --secondary: #f8f9fc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9a0;
+            --info: #4895ef;
+            --warning: #f77f00;
+            --danger: #ef476f;
+            --white: #ffffff;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background-color: var(--secondary);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--white) !important;
+            box-shadow: var(--shadow-md);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+            transition: var(--transition);
+            opacity: 1;
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .nav-link {
+            color: var(--gray);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            margin: 0 0.25rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Hero Carousel */
+        .hero-carousel {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .carousel-item {
+            height: 100vh;
+        }
+
+        .carousel-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 1;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(2px);
+        }
+
+        .carousel-caption {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            padding: 0 2rem;
+        }
+
+        .carousel-caption h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Form Container */
+        .form-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 0 1.5rem;
+        }
+
+        .form-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+
+        .btn-submit {
+            background: var(--success);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 50px;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-submit:hover {
+            background: #3db38a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 201, 160, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.7rem 1rem;
+            }
+            
+            .carousel-caption h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 0 1rem;
+            }
+            
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .carousel-caption h1 {
+                font-size: 1.75rem;
+                margin-bottom: 1rem;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/images/logo.png}" src="../static/images/logo.png" alt="Admin Dashboard">
+                Admin Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin/categories}">
+                            <i class="fas fa-tags"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/products}">
+                            <i class="fas fa-boxes"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/logout}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <div id="categoryCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/images/image4.jpg" class="carousel-image" alt="Background 1">
+                <div class="carousel-caption">
+                    <h1 th:text="${category.id != null} ? 'Update Category' : 'Add New Category'"></h1>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/images/image5.jpg" class="carousel-image" alt="Background 2">
+                <div class="carousel-caption">
+                    <h1 th:text="${category.id != null} ? 'Update Category' : 'Add New Category'"></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-card">
+            <h2 class="form-title" th:text="${category.id != null} ? 'Update Category' : 'Add New Category'"></h2>
+            <form th:action="@{/admin/categories/add}" method="post" th:object="${category}">
+                <input type="hidden" name="id" th:field="*{id}">
+                
+                <div class="mb-4">
+                    <label for="name" class="form-label">Category Name</label>
+                    <input type="text" class="form-control" required th:field="*{name}" 
+                           id="name" placeholder="Enter category name">
+                </div>
+
+                <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-save me-2"></i>
+                    <span th:text="${category.id != null} ? 'Update Category' : 'Add Category'"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize carousel
+        var carousel = new bootstrap.Carousel(document.getElementById('categoryCarousel'), {
+            interval: 5000,
+            ride: 'carousel'
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product Management | Admin Dashboard</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e6eaf8;
+            --primary-dark: #3a56e0;
+            --secondary: #f8f9fc;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9a0;
+            --info: #4895ef;
+            --warning: #f77f00;
+            --danger: #ef476f;
+            --white: #ffffff;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--white) !important;
+            box-shadow: var(--shadow-md);
+            padding: 0.8rem 2rem;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .nav-link {
+            color: var(--gray);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            margin: 0 0.25rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .admin-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .page-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            border: none;
+        }
+
+        .btn-success:hover {
+            background: #3db38a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(76, 201, 160, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--danger);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #d33a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 71, 111, 0.3);
+        }
+
+        .btn-info {
+            background: var(--info);
+            border: none;
+        }
+
+        .btn-info:hover {
+            background: #3a8bd4;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(72, 155, 239, 0.3);
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            padding: 1.5rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table thead th {
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+            border: none;
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--primary-light);
+        }
+
+        .table td, .table th {
+            padding: 1rem 1.5rem;
+            vertical-align: middle;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .table th {
+            font-weight: 600;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .product-image:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn {
+            padding: 0.4rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--light-gray);
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.7rem 1rem;
+            }
+            
+            .admin-container {
+                padding: 0 1rem;
+            }
+            
+            .table thead {
+                display: none;
+            }
+            
+            .table, .table tbody, .table tr, .table td {
+                display: block;
+                width: 100%;
+            }
+            
+            .table tr {
+                margin-bottom: 1rem;
+                border-radius: var(--radius-sm);
+                box-shadow: var(--shadow-sm);
+                padding: 0.5rem;
+            }
+            
+            .table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-top: none;
+                border-bottom: 1px solid var(--light-gray);
+            }
+            
+            .table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 1rem;
+                width: calc(50% - 1rem);
+                padding-right: 1rem;
+                text-align: left;
+                font-weight: 600;
+                color: var(--dark);
+            }
+            
+            .action-buttons {
+                justify-content: flex-end;
+            }
+            
+            .product-image {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-image {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img th:src="@{/images/logo.png}" src="../static/images/logo.png" alt="Admin Dashboard">
+                Admin Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin}">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/categories}">
+                            <i class="fas fa-tags"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin/products}">
+                            <i class="fas fa-boxes"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/logout}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="admin-container">
+        <div class="page-header">
+            <h1 class="page-title">Product Management</h1>
+            <a th:href="@{/admin/products/add}" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Add New Product
+            </a>
+        </div>
+
+        <div class="table-container">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Image</th>
+                            <th scope="col" class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${products.empty}">
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <h4>No Products Found</h4>
+                                <p>Add your first product to get started</p>
+                            </td>
+                        </tr>
+                        
+                        <tr th:each="product, iStat : ${products}">
+                            <th scope="row" th:text="${iStat.index + 1}" data-label="#">1</th>
+                            <td th:text="${product.name}" data-label="Product Name">Sample Product</td>
+                            <td th:text="${product.category.name}" data-label="Category">Sample Category</td>
+                            <td>
+                                <img class="product-image" th:src="@{${'/productImages/' + product.imageName}}" alt="Product Image">
+                            </td>
+                            <td class="text-end">
+                                <div class="action-buttons">
+                                    <a href="" th:href="@{/admin/product/update/{id}(id=${product.id})}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="" th:href="@{/admin/product/delete/{id}(id=${product.id})}" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        });
+    </script>
+</body>
+</html>
